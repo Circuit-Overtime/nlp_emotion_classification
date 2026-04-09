@@ -2,6 +2,13 @@
 
 A multi-approach NLP system that classifies English text into six emotion categories — **sadness**, **joy**, **love**, **anger**, **fear**, and **surprise** — using progressively advanced models, culminating in a fine-tuned DistilBERT transformer achieving **93.75% test accuracy**.
 
+<p align="center">
+  <a href="https://huggingface.co/spaces/Elixpo/emo_bert"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Live%20Demo-blue" alt="HF Spaces"></a>
+  <a href="https://www.kaggle.com/code/circuitovertime/nlp-emotion-classification-distilbert"><img src="https://img.shields.io/badge/Kaggle-Training%20Notebook-20BEFF?logo=kaggle&logoColor=white" alt="Kaggle"></a>
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Accuracy-93.75%25-brightgreen" alt="Accuracy">
+</p>
+
 ## Dataset
 
 **[dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)** — 20,000 labeled English text samples from HuggingFace.
@@ -71,21 +78,25 @@ The model is most confident on **sadness** and **joy** (highest support), and st
 
 A Gradio web app loads the fine-tuned DistilBERT model and provides real-time emotion detection via a text input interface.
 
+> **[Try it live on Hugging Face Spaces](https://huggingface.co/spaces/Elixpo/emo_bert)**
+
 <img width="1606" height="548" alt="image" src="https://github.com/user-attachments/assets/7db8853a-8d9c-4ca0-a181-648c2a9aa254" />
 
+## Links
 
-## Tech Stack
+| Resource | Link |
+|----------|------|
+| Live Demo | [huggingface.co/spaces/Elixpo/emo_bert](https://huggingface.co/spaces/Elixpo/emo_bert) |
+| Training Notebook | [kaggle.com/code/circuitovertime/nlp-emotion-classification-distilbert](https://www.kaggle.com/code/circuitovertime/nlp-emotion-classification-distilbert) |
+| Dataset | [huggingface.co/datasets/dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion) |
 
-| Component | Technology |
-|-----------|------------|
-| Transformer fine-tuning | PyTorch, HuggingFace Transformers |
-| Sequence model | TensorFlow / Keras |
-| Classical ML | scikit-learn |
-| Data | HuggingFace Datasets |
-| Visualization | Matplotlib, Seaborn |
-| Web app | Streamlit |
-| Python | 3.11 |
+---
 
-## License
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,20&height=100&section=footer" width="100%" />
+</p>
 
-Open source for educational and research purposes.
+<p align="center">
+  <sub>Built with PyTorch, HuggingFace Transformers, and Gradio</sub><br>
+  <sub>Licensed under <a href="https://opensource.org/licenses/MIT">MIT</a> — free for educational and research use</sub>
+</p>
