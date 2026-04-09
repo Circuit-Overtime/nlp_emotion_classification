@@ -1,6 +1,6 @@
 # Emotion Detection from Text using NLP
 
-A multi-approach NLP system that classifies English text into six emotion categories — **sadness**, **joy**, **love**, **anger**, **fear**, and **surprise** — using progressively advanced models, culminating in a fine-tuned DistilBERT transformer achieving **92.55% test accuracy**.
+A multi-approach NLP system that classifies English text into six emotion categories — **sadness**, **joy**, **love**, **anger**, **fear**, and **surprise** — using progressively advanced models, culminating in a fine-tuned DistilBERT transformer achieving **93.75% test accuracy**.
 
 ## Dataset
 
@@ -24,17 +24,25 @@ Traditional pipeline using TF-IDF vectorization (10K features, 1-2 gram range, E
 
 Custom architecture: Embedding(20K vocab, 128d) → LSTM(128) → Dropout(0.5) → Dense(6, softmax). Trained with Adam optimizer and sparse categorical crossentropy for 10 epochs. The model failed to converge — stuck predicting the majority class — likely due to insufficient embedding quality and no pre-trained weights. Demonstrates the gap between training from scratch vs. leveraging pre-trained representations.
 
-### 3. DistilBERT (Fine-tuned) — 92.55%
+### 3. DistilBERT (Fine-tuned) — 93.75%
 
 Fine-tuned `distilbert-base-uncased` (66.9M parameters) using HuggingFace Trainer. DistilBERT retains 97% of BERT's language understanding at 60% the size and 2x inference speed.
 
+**Training progress:**
+
+| Epoch | Training Loss | Validation Loss | Accuracy |
+|-------|--------------|-----------------|----------|
+| 1 | 0.6862 | 0.5305 | 91.65% |
+| 2 | 0.3889 | 0.3299 | 93.65% |
+| 3 | 0.2855 | 0.3163 | **93.75%** |
+
 **Training configuration:**
 - Learning rate: 2e-5 with linear warmup
-- Batch size: 16 (32 on Kaggle T4)
-- Epochs: 3 (sweet spot — overfitting begins at epoch 4+)
+- Batch size: 32 (Kaggle T4 x2)
+- Epochs: 3 (sweet spot — validation loss plateaus at epoch 3)
 - Weight decay: 0.01
 - FP16 mixed precision on GPU
-- Total training time: ~10-15 min (T4 GPU) / ~17 min (GTX 1060)
+- Total training time: ~10-15 min (T4 GPU)
 
 **Per-class performance (test set):**
 

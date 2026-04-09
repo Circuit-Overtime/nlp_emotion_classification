@@ -1,8 +1,11 @@
 # Emotion Detection - Python 3.11
 # Install: pip install -r requirements.txt
 
-# Core ML
+# Core ML (CUDA 12.8 - RTX 3050)
+--index-url https://download.pytorch.org/whl/cu128
 torch>=2.0
+--index-url https://pypi.org/simple
+
 transformers>=4.30
 datasets>=2.14
 accelerate>=0.20

@@ -9,9 +9,9 @@ Usage:
 """
 
 import os
-import sys
 
 import streamlit as st
+import torch
 from transformers import pipeline
 
 # Resolve model path relative to project root
@@ -30,10 +30,12 @@ def load_classifier():
             "Or download from Kaggle and extract to `models/emotion_model/`."
         )
         st.stop()
+    device = 0 if torch.cuda.is_available() else -1
     return pipeline(
         "text-classification",
         model=MODEL_DIR,
         tokenizer=MODEL_DIR,
+        device=device,
     )
 
 classifier = load_classifier()
