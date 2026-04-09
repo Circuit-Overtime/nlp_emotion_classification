@@ -1,9 +1,32 @@
+# Python
 venv/
 __pycache__/
 *.pyc
-0.26.0
-0.26.0'
-emotion_model/
-logs/
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Data (downloaded at runtime)
+data/emotion/
+
+# Model weights (too large for git)
+models/emotion_model/*.bin
+models/emotion_model/*.safetensors
+models/emotion_model/*.h5
+!models/emotion_model/.gitkeep
+
+# Training outputs
 results/
+logs/
+outputs/
+*.zip
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

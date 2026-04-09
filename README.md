@@ -1,168 +1,125 @@
 # Emotion Detection from Text using NLP
 
-A comprehensive Natural Language Processing project that detects emotions from text using multiple machine learning approaches. This project implements and compares three different models: a traditional TF-IDF + Logistic Regression baseline, a deep learning LSTM model, and a state-of-the-art fine-tuned DistilBERT transformer model.
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Dataset](#dataset)
-- [Models](#models)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Results](#results)
-- [Technologies Used](#technologies-used)
-
-## 🎯 Overview
-
-This project demonstrates emotion classification from textual data using various NLP techniques. The system can classify text into six distinct emotion categories: **sadness**, **joy**, **love**, **anger**, **fear**, and **surprise**. The project includes both model training notebooks and a production-ready Streamlit web application for real-time emotion detection.
-
-## ✨ Features
-
-- **Multiple Model Implementations**: Compare traditional ML, deep learning, and transformer-based approaches
-- **Interactive Web Application**: Real-time emotion detection through an intuitive Streamlit interface
-- **Comprehensive Evaluation**: Detailed performance metrics and confusion matrix analysis
-- **Production Ready**: Deployed model with easy-to-use API interface
-
-## 📊 Dataset
-
-The project uses the **dair-ai/emotion** dataset from Hugging Face, which contains:
-- **Training set**: 16,000 samples
-- **Validation set**: 2,000 samples
-- **Test set**: 2,000 samples
-- **6 emotion classes**: sadness, joy, love, anger, fear, surprise
-
-The dataset consists of English text samples labeled with their corresponding emotional states, making it ideal for supervised learning approaches.
-
-## 🤖 Models
-
-### 1. TF-IDF + Logistic Regression (Baseline)
-A traditional machine learning approach using:
-- **TF-IDF Vectorization**: Converts text to numerical features using term frequency-inverse document frequency
-- **Logistic Regression**: Linear classifier for multi-class emotion classification
-- **Features**: 10,000 max features with 1-2 gram ranges
-
-### 2. LSTM (Long Short-Term Memory)
-A deep learning model built from scratch using TensorFlow/Keras:
-- **Embedding Layer**: Converts words to dense vector representations
-- **LSTM Layers**: Captures sequential patterns and long-term dependencies in text
-- **Dropout**: Regularization to prevent overfitting
-- **Architecture**: Custom-built neural network optimized for emotion classification
-
-### 3. DistilBERT (Fine-tuned)
-A state-of-the-art transformer model:
-- **Base Model**: DistilBERT (distilbert-base-uncased) - a lighter, faster version of BERT
-- **Fine-tuning**: Customized on the emotion dataset for optimal performance
-- **Best Performance**: Achieves 92.55% accuracy on the test set
-- **Deployment**: Used in the production Streamlit application
-
-## 🚀 Installation
-
-### Prerequisites
-
-- Python 3.7 or higher
-- pip package manager
-
-### Step 1: Clone the Repository
-
-```bash
-git clone <repository-url>
-cd Emotion-Detection
-```
-
-### Step 2: Create a Virtual Environment (Recommended)
-
-```bash
-# On Windows
-python -m venv venv
-venv\Scripts\activate
-
-# On macOS/Linux
-python -m venv venv
-source venv/bin/activate
-```
-
-### Step 3: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-**Note**: The requirements.txt includes PyTorch with CPU support. If you have a CUDA-compatible GPU and want to use GPU acceleration, you may need to install the appropriate PyTorch version from [pytorch.org](https://pytorch.org/).
-
-## 💻 Usage
-
-### Running the Streamlit Web Application
-
-1. **Ensure the trained model is available**: The application expects a fine-tuned DistilBERT model in the `./emotion_model` directory. If you haven't trained the model yet, you'll need to:
-   - Run the `distilbert.ipynb` notebook to train the model
-   - Save the model to the `./emotion_model` directory
-
-2. **Launch the Streamlit app**:
-
-```bash
-streamlit run app.py
-```
-
-3. **Access the application**: Open your web browser and navigate to the URL shown in the terminal (typically `http://localhost:8501`)
-
-4. **Use the application**:
-   - Enter or paste text in the text area
-   - Click the "Detect Emotion" button
-   - View the predicted emotion and confidence score
-
-### Training Models
-
-The project includes Jupyter notebooks for training each model:
-
-- **`data_exploration.ipynb`**: Explore and understand the dataset
-- **`baseline_model.ipynb`**: Train the TF-IDF + Logistic Regression baseline model
-- **`lstm.ipynb`**: Train the LSTM model from scratch
-- **`distilbert.ipynb`**: Fine-tune the DistilBERT model (produces the best results)
-
-To train models:
-1. Open the desired notebook in Jupyter Lab or Jupyter Notebook
-2. Run all cells sequentially
-3. The notebooks will download the dataset, preprocess the data, train the model, and evaluate performance
+A comprehensive NLP project that detects emotions from text using multiple ML approaches — from a traditional TF-IDF baseline to a fine-tuned DistilBERT transformer achieving **92.55% accuracy**. Includes a production-ready Streamlit web app.
 
 ## 📁 Project Structure
 
 ```
 Emotion-Detection/
+├── .python-version              # Python 3.11
+├── requirements.txt             # Pinned dependencies
+├── README.md
 │
-├── app.py                      # Streamlit web application
-├── requirements.txt            # Python dependencies
-├── README.md                   # Project documentation
+├── data/
+│   └── download.py              # Download dair-ai/emotion dataset
 │
-├── data_exploration.ipynb      # Dataset exploration and analysis
-├── baseline_model.ipynb        # TF-IDF + Logistic Regression model
-├── lstm.ipynb                  # LSTM model implementation
-├── distilbert.ipynb            # DistilBERT fine-tuning
+├── training/
+│   ├── explore_data.py          # Dataset exploration + visualizations
+│   ├── train_baseline.py        # TF-IDF + Logistic Regression
+│   ├── train_lstm.py            # LSTM (TensorFlow/Keras)
+│   └── train_distilbert.py      # DistilBERT fine-tuning (best model)
 │
-└── emotion_model/              # Trained DistilBERT model (created after training)
-    ├── config.json
-    ├── pytorch_model.bin
-    └── tokenizer files
+├── notebooks/                   # Original Jupyter notebooks
+│   ├── data_exploration.ipynb
+│   ├── baseline_model.ipynb
+│   ├── lstm.ipynb
+│   ├── distilbert.ipynb
+│   └── kaggle_distilbert.ipynb  # Kaggle-ready training notebook
+│
+├── models/
+│   └── emotion_model/           # Trained model files (after training)
+│
+└── app/
+    └── streamlit_app.py         # Streamlit web application
 ```
+
+## 📊 Dataset
+
+**[dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)** from HuggingFace:
+- **20,000** English text samples across **6 emotion classes**
+- Splits: 16,000 train / 2,000 validation / 2,000 test
+- Classes: sadness, joy, love, anger, fear, surprise
+
+## 🤖 Models
+
+| Model | Script | Accuracy |
+|-------|--------|----------|
+| TF-IDF + Logistic Regression | `training/train_baseline.py` | 89.1% |
+| LSTM | `training/train_lstm.py` | ~35% |
+| **DistilBERT (fine-tuned)** | `training/train_distilbert.py` | **92.55%** |
+
+## 🚀 Setup
+
+### Prerequisites
+- Python 3.11
+- pip
+
+### Install
+
+```bash
+git clone <repository-url>
+cd Emotion-Detection
+
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+> For GPU training, install the CUDA version of PyTorch from [pytorch.org](https://pytorch.org/)
+
+## 💻 Usage
+
+### 1. Download Dataset (optional — scripts auto-download)
+
+```bash
+python data/download.py
+python data/download.py --csv    # also export as CSV
+```
+
+### 2. Train Models
+
+```bash
+# Explore the dataset
+python training/explore_data.py
+
+# Baseline (fast, ~89% accuracy)
+python training/train_baseline.py
+
+# LSTM
+python training/train_lstm.py --epochs 10
+
+# DistilBERT (best, ~93% accuracy)
+python training/train_distilbert.py
+python training/train_distilbert.py --epochs 5 --batch-size 32 --lr 3e-5
+```
+
+### 3. Train on Kaggle (recommended for GPU)
+
+1. Upload `notebooks/kaggle_distilbert.ipynb` to [Kaggle](https://www.kaggle.com/code)
+2. Enable **GPU T4** and **Internet** in Settings
+3. Run All — takes ~10-15 min
+4. Download `emotion_model.zip` from the Output panel
+5. Extract to `models/emotion_model/`
+
+### 4. Run the Web App
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+Open `http://localhost:8501`, enter text, and detect emotions.
 
 ## 📈 Results
 
-### Model Performance Comparison
-
-| Model | Accuracy | Description |
-|-------|----------|-------------|
-| **DistilBERT** | **92.55%** | Fine-tuned transformer model (Best) |
-| LSTM | ~85-90% | Deep learning model from scratch |
-| TF-IDF + Logistic Regression | ~80-85% | Traditional ML baseline |
-
 ### Confusion Matrix
-
-The confusion matrix below shows the performance of the DistilBERT model across all six emotion classes:
 
 <img width="554" height="468" alt="Confusion Matrix" src="https://github.com/user-attachments/assets/14cb131e-c3a7-42ad-916e-e4effbf7448a" />
 
-### Application Screenshots
+### Application
 
 <img width="964" height="688" alt="Streamlit Application Interface" src="https://github.com/user-attachments/assets/1a1c3bd9-9a6d-45a2-86b4-c96ff10c06af" />
 
@@ -170,31 +127,25 @@ The confusion matrix below shows the performance of the DistilBERT model across 
 
 <img width="964" height="731" alt="Emotion Detection Example 2" src="https://github.com/user-attachments/assets/a66def35-8234-48c3-802c-00e96a06c867" />
 
-## 🛠 Technologies Used
+## 🛠 Tech Stack
 
-- **Python**: Core programming language
-- **PyTorch**: Deep learning framework for transformer models
-- **Transformers (Hugging Face)**: Pre-trained models and training utilities
-- **TensorFlow/Keras**: LSTM model implementation
-- **scikit-learn**: Traditional ML models and evaluation metrics
-- **Streamlit**: Web application framework
-- **datasets (Hugging Face)**: Dataset loading and management
-- **Jupyter Notebooks**: Interactive development and experimentation
+- **PyTorch** + **Transformers** — DistilBERT fine-tuning
+- **TensorFlow/Keras** — LSTM model
+- **scikit-learn** — Baseline ML + metrics
+- **Streamlit** — Web application
+- **HuggingFace Datasets** — Data loading
+- **Matplotlib/Seaborn** — Visualization
 
 ## 📝 Notes
 
-- The DistilBERT model requires significant computational resources for training. Training on CPU may take several hours.
-- For production use, consider deploying the model using cloud services or containerization for better scalability.
-- The model performs best on English text and may have reduced accuracy on other languages or heavily informal text.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+- DistilBERT training on CPU takes several hours — use Kaggle (free T4 GPU) or a local GPU
+- The model works best on English text
+- Model files (`models/emotion_model/`) are `.gitignore`d due to size (~260MB)
 
 ## 📄 License
 
-This project is open source and available for educational and research purposes.
+Open source for educational and research purposes.
 
 ---
 
-**Built with ❤️ using Python and modern NLP techniques**
+**Built with Python and modern NLP techniques**
