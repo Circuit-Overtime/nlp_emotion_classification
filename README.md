@@ -1,128 +1,67 @@
 # Emotion Detection from Text using NLP
 
-A comprehensive NLP project that detects emotions from text using multiple ML approaches — from a traditional TF-IDF baseline to a fine-tuned DistilBERT transformer achieving **92.55% accuracy**. Includes a production-ready Streamlit web app.
+A multi-approach NLP system that classifies English text into six emotion categories — **sadness**, **joy**, **love**, **anger**, **fear**, and **surprise** — using progressively advanced models, culminating in a fine-tuned DistilBERT transformer achieving **92.55% test accuracy**.
 
-## 📁 Project Structure
+## Dataset
 
-```
-Emotion-Detection/
-├── .python-version              # Python 3.11
-├── requirements.txt             # Pinned dependencies
-├── README.md
-│
-├── data/
-│   └── download.py              # Download dair-ai/emotion dataset
-│
-├── training/
-│   ├── explore_data.py          # Dataset exploration + visualizations
-│   ├── train_baseline.py        # TF-IDF + Logistic Regression
-│   ├── train_lstm.py            # LSTM (TensorFlow/Keras)
-│   └── train_distilbert.py      # DistilBERT fine-tuning (best model)
-│
-├── notebooks/                   # Original Jupyter notebooks
-│   ├── model_trials/            # Exploration & model experiments
-│   │   ├── data_exploration.ipynb
-│   │   ├── baseline_model.ipynb
-│   │   ├── lstm.ipynb
-│   │   ├── distilbert.ipynb
-│   │   └── kaggle_distilbert.ipynb
-│   └── distilbert_finetune/
-│       └── nlp-emotion-classification-distilbert.ipynb
-│
-├── models/
-│   └── emotion_model/           # Trained model files (after training)
-│
-└── app/
-    └── streamlit_app.py         # Streamlit web application
-```
+**[dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)** — 20,000 labeled English text samples from HuggingFace.
 
-## 📊 Dataset
+| Split | Samples |
+|-------|---------|
+| Train | 16,000 |
+| Validation | 2,000 |
+| Test | 2,000 |
 
-**[dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)** from HuggingFace:
-- **20,000** English text samples across **6 emotion classes**
-- Splits: 16,000 train / 2,000 validation / 2,000 test
-- Classes: sadness, joy, love, anger, fear, surprise
+The dataset is imbalanced: **joy** (33.5%) and **sadness** (29.2%) dominate, while **surprise** (3.6%) and **love** (8.2%) are underrepresented. Despite this, the transformer model generalizes well across all classes.
 
-## 🤖 Models
+## Models & Results
 
-| Model | Script | Accuracy |
-|-------|--------|----------|
-| TF-IDF + Logistic Regression | `training/train_baseline.py` | 89.1% |
-| LSTM | `training/train_lstm.py` | ~35% |
-| **DistilBERT (fine-tuned)** | `training/train_distilbert.py` | **92.55%** |
+### 1. TF-IDF + Logistic Regression (Baseline) — 89.1%
 
-## 🚀 Setup
+Traditional pipeline using TF-IDF vectorization (10K features, 1-2 gram range, English stopwords removed) feeding a Logistic Regression classifier. Strong baseline that outperforms the deep learning approach below, demonstrating that classical methods remain competitive on small datasets.
 
-### Prerequisites
-- Python 3.11
-- pip
+### 2. LSTM — ~35%
 
-### Install
+Custom architecture: Embedding(20K vocab, 128d) → LSTM(128) → Dropout(0.5) → Dense(6, softmax). Trained with Adam optimizer and sparse categorical crossentropy for 10 epochs. The model failed to converge — stuck predicting the majority class — likely due to insufficient embedding quality and no pre-trained weights. Demonstrates the gap between training from scratch vs. leveraging pre-trained representations.
 
-```bash
-git clone <repository-url>
-cd Emotion-Detection
+### 3. DistilBERT (Fine-tuned) — 92.55%
 
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
+Fine-tuned `distilbert-base-uncased` (66.9M parameters) using HuggingFace Trainer. DistilBERT retains 97% of BERT's language understanding at 60% the size and 2x inference speed.
 
-pip install -r requirements.txt
-```
+**Training configuration:**
+- Learning rate: 2e-5 with linear warmup
+- Batch size: 16 (32 on Kaggle T4)
+- Epochs: 3 (sweet spot — overfitting begins at epoch 4+)
+- Weight decay: 0.01
+- FP16 mixed precision on GPU
+- Total training time: ~10-15 min (T4 GPU) / ~17 min (GTX 1060)
 
-> For GPU training, install the CUDA version of PyTorch from [pytorch.org](https://pytorch.org/)
+**Per-class performance (test set):**
 
-## 💻 Usage
+| Emotion | Precision | Recall | F1-Score | Support |
+|---------|-----------|--------|----------|---------|
+| Sadness | 0.95 | 0.96 | 0.95 | 581 |
+| Joy | 0.97 | 0.94 | 0.95 | 695 |
+| Love | 0.79 | 0.89 | 0.84 | 159 |
+| Anger | 0.92 | 0.92 | 0.92 | 275 |
+| Fear | 0.89 | 0.88 | 0.88 | 224 |
+| Surprise | 0.78 | 0.79 | 0.78 | 66 |
 
-### 1. Download Dataset (optional — scripts auto-download)
+The model is most confident on **sadness** and **joy** (highest support), and struggles most with **surprise** and **love** (lowest support + semantic overlap with joy).
 
-```bash
-python data/download.py
-python data/download.py --csv    # also export as CSV
-```
+## Key Takeaways
 
-### 2. Train Models
+- **Pre-training is everything**: DistilBERT (pre-trained on massive text corpora) crushes the from-scratch LSTM by 57+ percentage points. On small datasets, transfer learning >> training from scratch.
+- **Classical ML holds up**: TF-IDF + LogReg achieves 89% with seconds of training — only 3.5% behind the transformer. For latency-sensitive or resource-constrained deployments, it's a viable option.
+- **3 epochs is optimal**: Fine-tuning BERT-family models on small datasets converges fast. Beyond 3 epochs, validation loss increases — the model memorizes training data.
 
-```bash
-# Explore the dataset
-python training/explore_data.py
-
-# Baseline (fast, ~89% accuracy)
-python training/train_baseline.py
-
-# LSTM
-python training/train_lstm.py --epochs 10
-
-# DistilBERT (best, ~93% accuracy)
-python training/train_distilbert.py
-python training/train_distilbert.py --epochs 5 --batch-size 32 --lr 3e-5
-```
-
-### 3. Train on Kaggle (recommended for GPU)
-
-1. Upload `notebooks/kaggle_distilbert.ipynb` to [Kaggle](https://www.kaggle.com/code)
-2. Enable **GPU T4** and **Internet** in Settings
-3. Run All — takes ~10-15 min
-4. Download `emotion_model.zip` from the Output panel
-5. Extract to `models/emotion_model/`
-
-### 4. Run the Web App
-
-```bash
-streamlit run app/streamlit_app.py
-```
-
-Open `http://localhost:8501`, enter text, and detect emotions.
-
-## 📈 Results
-
-### Confusion Matrix
+## Confusion Matrix
 
 <img width="554" height="468" alt="Confusion Matrix" src="https://github.com/user-attachments/assets/14cb131e-c3a7-42ad-916e-e4effbf7448a" />
 
-### Application
+## Application
+
+A Streamlit web app loads the fine-tuned DistilBERT model and provides real-time emotion detection via a text input interface.
 
 <img width="964" height="688" alt="Streamlit Application Interface" src="https://github.com/user-attachments/assets/1a1c3bd9-9a6d-45a2-86b4-c96ff10c06af" />
 
@@ -130,25 +69,18 @@ Open `http://localhost:8501`, enter text, and detect emotions.
 
 <img width="964" height="731" alt="Emotion Detection Example 2" src="https://github.com/user-attachments/assets/a66def35-8234-48c3-802c-00e96a06c867" />
 
-## 🛠 Tech Stack
+## Tech Stack
 
-- **PyTorch** + **Transformers** — DistilBERT fine-tuning
-- **TensorFlow/Keras** — LSTM model
-- **scikit-learn** — Baseline ML + metrics
-- **Streamlit** — Web application
-- **HuggingFace Datasets** — Data loading
-- **Matplotlib/Seaborn** — Visualization
+| Component | Technology |
+|-----------|------------|
+| Transformer fine-tuning | PyTorch, HuggingFace Transformers |
+| Sequence model | TensorFlow / Keras |
+| Classical ML | scikit-learn |
+| Data | HuggingFace Datasets |
+| Visualization | Matplotlib, Seaborn |
+| Web app | Streamlit |
+| Python | 3.11 |
 
-## 📝 Notes
-
-- DistilBERT training on CPU takes several hours — use Kaggle (free T4 GPU) or a local GPU
-- The model works best on English text
-- Model files (`models/emotion_model/`) are `.gitignore`d due to size (~260MB)
-
-## 📄 License
+## License
 
 Open source for educational and research purposes.
-
----
-
-**Built with Python and modern NLP techniques**
