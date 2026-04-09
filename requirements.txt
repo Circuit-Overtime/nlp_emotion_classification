@@ -4,6 +4,7 @@
 # Core ML (CUDA 12.8 - RTX 3050)
 --index-url https://download.pytorch.org/whl/cu128
 torch>=2.0
+torchvision>=0.15
 --index-url https://pypi.org/simple
 
 transformers>=4.30
