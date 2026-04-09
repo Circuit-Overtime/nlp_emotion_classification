@@ -31,3 +31,6 @@ Thumbs.db
 .idea/
 *.swp
 emotion_model/
+
+# HF Spaces clone (separate repo)
+spaces/emo_bert/
