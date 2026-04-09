@@ -20,11 +20,14 @@ Emotion-Detection/
 │   └── train_distilbert.py      # DistilBERT fine-tuning (best model)
 │
 ├── notebooks/                   # Original Jupyter notebooks
-│   ├── data_exploration.ipynb
-│   ├── baseline_model.ipynb
-│   ├── lstm.ipynb
-│   ├── distilbert.ipynb
-│   └── kaggle_distilbert.ipynb  # Kaggle-ready training notebook
+│   ├── model_trials/            # Exploration & model experiments
+│   │   ├── data_exploration.ipynb
+│   │   ├── baseline_model.ipynb
+│   │   ├── lstm.ipynb
+│   │   ├── distilbert.ipynb
+│   │   └── kaggle_distilbert.ipynb
+│   └── distilbert_finetune/
+│       └── nlp-emotion-classification-distilbert.ipynb
 │
 ├── models/
 │   └── emotion_model/           # Trained model files (after training)
