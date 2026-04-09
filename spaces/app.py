@@ -28,8 +28,8 @@ LABEL_MAP = {
 
 classifier = pipeline(
     "text-classification",
-    model="./emotion_model",
-    tokenizer="./emotion_model",
+    model="./models/emotion_model",
+    tokenizer="./models/emotion_model",
 )
 
 
