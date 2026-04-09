@@ -59,8 +59,8 @@ The model is most confident on **sadness** and **joy** (highest support), and st
 
 ## Key Takeaways
 
-- **Pre-training is everything**: DistilBERT (pre-trained on massive text corpora) crushes the from-scratch LSTM by 57+ percentage points. On small datasets, transfer learning >> training from scratch.
-- **Classical ML holds up**: TF-IDF + LogReg achieves 89% with seconds of training — only 3.5% behind the transformer. For latency-sensitive or resource-constrained deployments, it's a viable option.
+- **Pre-training is everything**: DistilBERT (pre-trained on massive text corpora) crushes the from-scratch LSTM by 58+ percentage points. On small datasets, transfer learning >> training from scratch.
+- **Classical ML holds up**: TF-IDF + LogReg achieves 89% with seconds of training — only 4.7% behind the transformer. For latency-sensitive or resource-constrained deployments, it's a viable option.
 - **3 epochs is optimal**: Fine-tuning BERT-family models on small datasets converges fast. Beyond 3 epochs, validation loss increases — the model memorizes training data.
 
 ## Confusion Matrix
