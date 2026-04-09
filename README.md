@@ -69,13 +69,10 @@ The model is most confident on **sadness** and **joy** (highest support), and st
 
 ## Application
 
-A Streamlit web app loads the fine-tuned DistilBERT model and provides real-time emotion detection via a text input interface.
+A Gradio web app loads the fine-tuned DistilBERT model and provides real-time emotion detection via a text input interface.
 
-<img width="964" height="688" alt="Streamlit Application Interface" src="https://github.com/user-attachments/assets/1a1c3bd9-9a6d-45a2-86b4-c96ff10c06af" />
+<img width="1606" height="548" alt="image" src="https://github.com/user-attachments/assets/7db8853a-8d9c-4ca0-a181-648c2a9aa254" />
 
-<img width="964" height="703" alt="Emotion Detection Example 1" src="https://github.com/user-attachments/assets/7657db4c-684e-45a9-bbfa-0e26e6567249" />
-
-<img width="964" height="731" alt="Emotion Detection Example 2" src="https://github.com/user-attachments/assets/a66def35-8234-48c3-802c-00e96a06c867" />
 
 ## Tech Stack
 
